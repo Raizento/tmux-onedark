@@ -57,6 +57,10 @@ onedark_widget_grey=$(get @onedark_widget_grey)
 date_format=$(get @onedark_date_format "%d/%m/%y")
 time_format=$(get @onedark_date_format "%H:%M")
 
+onedark_zoomed_window_symbol=$(get @onedark_zoomed_window_symbol "(Z)")
+onedark_last_window_symbol=$(get @onedark_zoomed_window_symbol "(L)")
+onedark_marked_pane_window_symbol=$(get @onedark_marked_pane_window_symbol "(M)")
+
 set status "on"
 
 set status-justify $(get @onedark_justify "left")
@@ -102,6 +106,9 @@ status_right_begin="#[fg=$onedark_visual_grey,bg=$onedark_black]"
 status_right_widgets=$(get @status_right_widgets)
 set status-right "${status_right_begin}${status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 
-set window-status-format "#[fg=$onedark_black,bg=$onedark_black] #[fg=$onedark_white,bg=$onedark_black]#I  #W #[fg=$onedark_black,bg=$onedark_black,nobold,nounderscore,noitalics]"
-set window-status-current-format "#[fg=$onedark_black,bg=$onedark_visual_grey] #[fg=$onedark_white,bg=$onedark_visual_grey]#I  #W #[fg=$onedark_visual_grey,bg=$onedark_black,nobold,nounderscore,noitalics]"
+
+window_name="#W#{?window_last_flag,$onedark_last_window_symbol,}#{?window_marked_flag,$onedark_marked_pane_window_symbol,}#{?window_zoomed_flag,$onedark_zoomed_window_symbol,}"
+
+set window-status-format "#[fg=$onedark_black,bg=$onedark_black] #[fg=$onedark_white,bg=$onedark_black]#I  ${window_name} #[fg=$onedark_black,bg=$onedark_black,nobold,nounderscore,noitalics]"
+set window-status-current-format "#[fg=$onedark_black,bg=$onedark_visual_grey] #[fg=$onedark_white,bg=$onedark_visual_grey]#I  ${window_name} #[fg=$onedark_visual_grey,bg=$onedark_black,nobold,nounderscore,noitalics]"
 #     
