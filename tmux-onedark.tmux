@@ -2,25 +2,16 @@
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 get() {
-  local option value default
-  option="$1"
-  default="$2"
-  value=$(tmux show-option -gqv "$option")
+   local option=$1
+   local default_value=$2
+   local option_value="$(tmux show-option -gqv "$option")"
 
-  if [ -n "$value" ]
-  then
-    if [ "$value" = "null" ]
-    then
-      echo ""
 
-    else
-      echo "$value"
-    fi
-
-  else
-    echo "$default"
-
-  fi
+   if [ -z "$option_value" ]; then
+      echo "$default_value"
+   else
+      echo "$option_value"
+   fi
 }
 
 set() {
@@ -34,6 +25,21 @@ setw() {
   local value=$2
   tmux set-window-option -gq "$option" "$value"
 }
+
+add() {
+  local option=$1
+  local value=$2
+  local delimiter=$3
+  local option_value=$(get "$option")
+  if [ -z "$option_value" ]; then
+    set "$option" "$value"
+  else 
+    tmux display-message "hallo"
+    tmux set-option -gaq "$option" " $delimiter $value"
+  fi
+}
+
+set @status_left_widgets ""
 
 theme=$(get @onedark_theme "dark")
 
@@ -77,9 +83,16 @@ set display-panes-colour "$onedark_blue"
 set status-bg "$onedark_black"
 set status-fg "$onedark_white"
 
-status_widgets=$(get "@onedark_widgets", (time))
+# change color when prefix key is pressed
+session_color="#{?client_prefix,$onedark_red,$onedark_accent}"
 
-session_color="#{?client_prefix,$onedark_red,$onedark_green}"
-set "status-left" "#[fg=$onedark_black,bg=$session_color,bold] #S #[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
-set status-right "#I"
+add @status_left_widgets "#[fg=$onedark_black,bg=$session_color,bold] #S"
+status_left_widgets=$(get @status_left_widgets)
+
+status_left_end="#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
+
+set status-left "${status_left_widgets} ${status_left_end} "
+#set status-right "#I"
+set status-right "#[fg=$onedark_visual_grey,bg=$onedark_black]#[fg=$onedark_white,bg=$onedark_visual_grey] %H:%M %D #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+
 #     
