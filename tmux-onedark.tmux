@@ -95,7 +95,6 @@ status_left_widgets=$(get @status_left_widgets)
 status_left_end="#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
 set status-left "${status_left_widgets} ${status_left_end} "
 
-
 set @status_right_widgets ""
 add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey] ${time_format}" ""
 add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey]${date_format}" ""
@@ -103,4 +102,6 @@ status_right_begin="#[fg=$onedark_visual_grey,bg=$onedark_black]"
 status_right_widgets=$(get @status_right_widgets)
 set status-right "${status_right_begin}${status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 
+set window-status-format "#[fg=$onedark_black,bg=$onedark_black] #[fg=$onedark_white,bg=$onedark_black]#I  #W #[fg=$onedark_black,bg=$onedark_black,nobold,nounderscore,noitalics]"
+set window-status-current-format "#[fg=$onedark_black,bg=$onedark_visual_grey] #[fg=$onedark_white,bg=$onedark_visual_grey]#I  #W #[fg=$onedark_visual_grey,bg=$onedark_black,nobold,nounderscore,noitalics]"
 #     
