@@ -39,7 +39,6 @@ add() {
   fi
 }
 
-set @status_left_widgets ""
 
 theme=$(get @onedark_theme "dark")
 
@@ -53,6 +52,10 @@ onedark_red=$(get @onedark_red)
 onedark_white=$(get @onedark_white)
 onedark_visual_grey=$(get @onedark_visual_grey)
 onedark_comment_grey=$(get @onedark_comment_grey)
+onedark_widget_grey=$(get @onedark_widget_grey)
+
+date_format=$(get @onedark_date_format "%d/%m/%y")
+time_format=$(get @onedark_date_format "%H:%M")
 
 set status "on"
 
@@ -86,13 +89,18 @@ set status-fg "$onedark_white"
 # change color when prefix key is pressed
 session_color="#{?client_prefix,$onedark_red,$onedark_accent}"
 
+set @status_left_widgets ""
 add @status_left_widgets "#[fg=$onedark_black,bg=$session_color,bold] #S"
 status_left_widgets=$(get @status_left_widgets)
-
 status_left_end="#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
-
 set status-left "${status_left_widgets} ${status_left_end} "
-#set status-right "#I"
-set status-right "#[fg=$onedark_visual_grey,bg=$onedark_black]#[fg=$onedark_white,bg=$onedark_visual_grey] %H:%M %D #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+
+
+set @status_right_widgets ""
+add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey] ${time_format}" ""
+add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey]${date_format}" ""
+status_right_begin="#[fg=$onedark_visual_grey,bg=$onedark_black]"
+status_right_widgets=$(get @status_right_widgets)
+set status-right "${status_right_begin}${status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 
 #     
