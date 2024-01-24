@@ -130,7 +130,7 @@ onedark_status_right_begin="#[fg=$onedark_widget_grey,bg=$onedark_black]"
 if [ -z "$onedark_status_right_widgets" ]; then
   set status-right "#[fg=$onedark_accent,bg=$onedark_black]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 else
-  set status-right "${onedark_status_right_begin}${onedark_status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+  set status-right "${onedark_status_right_begin}${onedark_status_right_widgets} #[fg=$onedark_accent,bg=$onedark_widget_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 fi
 ### Right status end
 
