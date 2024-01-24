@@ -26,19 +26,32 @@ setw() {
   tmux set-window-option -gq "$option" "$value"
 }
 
-add() {
-  local option=$1
-  local value=$2
-  local delimiter=$3
-  local option_value=$(get "$option")
-  if [ -z "$option_value" ]; then
-    set "$option" "$value"
-  else 
-    tmux display-message "hallo"
-    tmux set-option -gaq "$option" " $delimiter $value"
-  fi
+add_widget() {
+    local widgets=$1
+    local widget=$2
+    local delimiter=$3
+    local option_value=$(get "$widgets")
+
+    if [ -z "$option_value" ]; then
+        set "$widgets" "#[fg=$onedark_white,bg=$onedark_widget_grey] $widget"
+    else
+      tmux set-option -gaq "$widgets" " $delimiter #[fg=$onedark_white,bg=$onedark_widget_grey]$widget"
+    fi
 }
 
+add_widget_left() {
+    local widgets=$1
+    local widget=$2
+
+    add_widget "$widgets" "$widget" ""
+}
+
+add_widget_right() {
+    local widgets=$1
+    local widget=$2
+
+    add_widget "$widgets" "$widget" ""
+}
 
 theme=$(get @onedark_theme "dark")
 
@@ -93,18 +106,32 @@ set status-fg "$onedark_white"
 # change color when prefix key is pressed
 session_color="#{?client_prefix,$onedark_red,$onedark_accent}"
 
+
+session="#[fg=$onedark_black,bg=$session_color,bold] #S "
+status_left_end="#[fg=$onedark_widget_grey,bg=$onedark_black]"
+
 set @status_left_widgets ""
-add @status_left_widgets "#[fg=$onedark_black,bg=$session_color,bold] #S"
 status_left_widgets=$(get @status_left_widgets)
-status_left_end="#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
-set status-left "${status_left_widgets} ${status_left_end}"
+"#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
+set status-left "${session}${status_left_end}${status_left_widgets}"
+
+if [ -z "$status_left_widgets" ]; then
+  set status-left "${session}#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
+else
+  set status-left "${session}#[fg=$session_color,bg=$onedark_widget_grey,nobold,nounderscore,noitalics]${status_left_widgets} ${status_left_end}"
+fi
 
 set @status_right_widgets ""
-add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey] ${time_format}" ""
-add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey]${date_format}" ""
-status_right_begin="#[fg=$onedark_visual_grey,bg=$onedark_black]"
+add_widget_right @status_right_widgets "${time_format}" 
+add_widget_right @status_right_widgets "${date_format}"
 status_right_widgets=$(get @status_right_widgets)
-set status-right "${status_right_begin}${status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+status_right_begin="#[fg=$onedark_widget_grey,bg=$onedark_black]"
+
+if [ -z "$status_right_widgets" ]; then
+  set status-right "#[fg=$onedark_accent,bg=$onedark_black]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+else
+  set status-right "${status_right_begin}${status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+fi
 
 
 window_name="#W#{?window_last_flag,$onedark_last_window_symbol,}#{?window_marked_flag,$onedark_marked_pane_window_symbol,}#{?window_zoomed_flag,$onedark_zoomed_window_symbol,}"
