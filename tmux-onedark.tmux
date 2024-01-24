@@ -40,17 +40,15 @@ add_widget() {
 }
 
 add_widget_left() {
-    local widgets=$1
-    local widget=$2
+    local widget=1
 
-    add_widget "$widgets" "$widget" ""
+    add_widget @onedark_status_left_widgets "$widget" ""
 }
 
 add_widget_right() {
-    local widgets=$1
-    local widget=$2
+    local widget=$1
 
-    add_widget "$widgets" "$widget" ""
+    add_widget @onedark_status_right_widgets "$widget" ""
 }
 
 theme=$(get @onedark_theme "dark")
@@ -103,36 +101,39 @@ set display-panes-colour "$onedark_blue"
 set status-bg "$onedark_black"
 set status-fg "$onedark_white"
 
+
+### Left status
 # change color when prefix key is pressed
 session_color="#{?client_prefix,$onedark_red,$onedark_accent}"
 
-
 session="#[fg=$onedark_black,bg=$session_color,bold] #S "
-status_left_end="#[fg=$onedark_widget_grey,bg=$onedark_black]"
+onedark_status_left_end="#[fg=$onedark_widget_grey,bg=$onedark_black]"
 
-set @status_left_widgets ""
-status_left_widgets=$(get @status_left_widgets)
+set @onedark_status_left_widgets ""
+onedark_status_left_widgets=$(get @onedark_status_left_widgets)
 "#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
-set status-left "${session}${status_left_end}${status_left_widgets}"
+set status-left "${session}${onedark_status_left_end}${onedark_status_left_widgets}"
 
-if [ -z "$status_left_widgets" ]; then
+if [ -z "$onedark_status_left_widgets" ]; then
   set status-left "${session}#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
 else
-  set status-left "${session}#[fg=$session_color,bg=$onedark_widget_grey,nobold,nounderscore,noitalics]${status_left_widgets} ${status_left_end}"
+  set status-left "${session}#[fg=$session_color,bg=$onedark_widget_grey,nobold,nounderscore,noitalics]${onedark_status_left_widgets} ${onedark_status_left_end}"
 fi
+### Left status end
 
-set @status_right_widgets ""
-add_widget_right @status_right_widgets "${time_format}" 
-add_widget_right @status_right_widgets "${date_format}"
-status_right_widgets=$(get @status_right_widgets)
-status_right_begin="#[fg=$onedark_widget_grey,bg=$onedark_black]"
+### Right status 
+set @onedark_status_right_widgets ""
+add_widget_right "${time_format}" 
+add_widget_right "${date_format}"
+onedark_status_right_widgets=$(get @onedark_status_right_widgets)
+onedark_status_right_begin="#[fg=$onedark_widget_grey,bg=$onedark_black]"
 
-if [ -z "$status_right_widgets" ]; then
+if [ -z "$onedark_status_right_widgets" ]; then
   set status-right "#[fg=$onedark_accent,bg=$onedark_black]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 else
-  set status-right "${status_right_begin}${status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
+  set status-right "${onedark_status_right_begin}${onedark_status_right_widgets} #[fg=$onedark_accent,bg=$onedark_visual_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 fi
-
+### Right status end
 
 window_name="#W#{?window_last_flag,$onedark_last_window_symbol,}#{?window_marked_flag,$onedark_marked_pane_window_symbol,}#{?window_zoomed_flag,$onedark_zoomed_window_symbol,}"
 
