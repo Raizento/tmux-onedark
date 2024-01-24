@@ -97,7 +97,7 @@ set @status_left_widgets ""
 add @status_left_widgets "#[fg=$onedark_black,bg=$session_color,bold] #S"
 status_left_widgets=$(get @status_left_widgets)
 status_left_end="#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
-set status-left "${status_left_widgets} ${status_left_end} "
+set status-left "${status_left_widgets} ${status_left_end}"
 
 set @status_right_widgets ""
 add @status_right_widgets "#[fg=$onedark_white,bg=$onedark_widget_grey] ${time_format}" ""
