@@ -61,27 +61,34 @@ session_color="#{?client_prefix,$onedark_red,$onedark_accent}"
 session="#[fg=$onedark_black,bg=$session_color,bold] #S "
 onedark_status_left_end="#[fg=$onedark_widget_grey,bg=$onedark_black]"
 
-set @onedark_status_left_widgets ""
-onedark_status_left_widgets=$(get @onedark_status_left_widgets)
-set status-left "${session}${onedark_status_left_end}${onedark_status_left_widgets}"
+onedark_status_left_widgets=$(get @onedark_status_left_widgets "")
+#set status-left "${session}${onedark_status_left_end}${onedark_status_left_widgets}"
 
 if [ -z "$onedark_status_left_widgets" ]; then
   set status-left "${session}#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
 else
+  # Add default styling to all added widgets
+  onedark_status_left_widgets=$(echo $onedark_status_left_widgets | sed "s/ /#[fg=$onedark_white,bg=$onedark_widget_grey]  /g")
+  
+  # Add styling to first widget
+  onedark_status_left_widgets="#[fg=$onedark_white,bg=$onedark_widget_grey] $onedark_status_left_widgets"
   set status-left "${session}#[fg=$session_color,bg=$onedark_widget_grey,nobold,nounderscore,noitalics]${onedark_status_left_widgets} ${onedark_status_left_end}"
 fi
 ### Left status end
 
 ### Right status 
-set @onedark_status_right_widgets ""
-add_widget_right "${time_format}" 
-add_widget_right "${date_format}"
-onedark_status_right_widgets=$(get @onedark_status_right_widgets)
 onedark_status_right_begin="#[fg=$onedark_widget_grey,bg=$onedark_black]"
+
+onedark_status_right_widgets=$(get @onedark_status_right_widgets "${time_format} ${date_format}")
 
 if [ -z "$onedark_status_right_widgets" ]; then
   set status-right "#[fg=$onedark_accent,bg=$onedark_black]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 else
+  # Add default styling to all added widgets
+  onedark_status_right_widgets=$(echo $onedark_status_right_widgets | sed "s/ /#[fg=$onedark_white,bg=$onedark_widget_grey]  /g")
+
+  # Add styling to first widget
+  onedark_status_right_widgets="#[fg=$onedark_white,bg=$onedark_widget_grey] $onedark_status_right_widgets"
   set status-right "${onedark_status_right_begin}${onedark_status_right_widgets} #[fg=$onedark_accent,bg=$onedark_widget_grey]#[fg=$onedark_black,bg=$onedark_accent,bold] #H "
 fi
 ### Right status end
