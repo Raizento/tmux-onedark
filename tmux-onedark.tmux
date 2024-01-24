@@ -111,7 +111,6 @@ onedark_status_left_end="#[fg=$onedark_widget_grey,bg=$onedark_black]"
 
 set @onedark_status_left_widgets ""
 onedark_status_left_widgets=$(get @onedark_status_left_widgets)
-"#[fg=$session_color,bg=$onedark_black,nobold,nounderscore,noitalics]"
 set status-left "${session}${onedark_status_left_end}${onedark_status_left_widgets}"
 
 if [ -z "$onedark_status_left_widgets" ]; then
